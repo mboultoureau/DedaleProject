@@ -14,5 +14,5 @@ make
 ```
 
 ```
-./BlindMaze
+./build/BlindMaze
 ```
