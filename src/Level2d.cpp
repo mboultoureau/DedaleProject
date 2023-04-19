@@ -9,7 +9,7 @@ Level2d::Level2d(SDL_Renderer* renderer)
     m_Renderer = renderer;
     m_TextureManager = new TextureManager(m_Renderer);
     m_WallsTexture = m_TextureManager->LoadImage("res/textures/walls.bmp");
-    m_Maze = std::make_unique<Maze>("");
+    m_Maze = std::make_unique<Maze>("res/levels/level1.level");
 }
 
 Level2d::~Level2d()
@@ -37,6 +37,7 @@ void Level2d::Render()
     wallSrcRect.h = 40;
     wallSrcRect.y = 0;
 
+    // Draw each cell
     for (unsigned int z = 0; z < m_Maze->GetHeight(); z++)
     {
         for (unsigned int y = 0; y < m_Maze->GetWidth(); y++)
@@ -46,12 +47,17 @@ void Level2d::Render()
                 wallDestRect.x = x * 40 + 5;
                 wallDestRect.y = y * 40 + 5;
 
+                // Getting the right cell in the texture
                 wallSrcRect.x = m_Maze->GetCell(x, y, z) * 40;
 
                 SDL_RenderCopy(m_Renderer, m_WallsTexture, &wallSrcRect, &wallDestRect);
+
+                // std::cout << (int)m_Maze->GetCell(x, y, z) << std::endl;
             }
         }
     }
+
+    // std::cout << std::endl << std::endl;
 
     // Draw north border
     SDL_Rect border;
@@ -62,17 +68,21 @@ void Level2d::Render()
     SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(m_Renderer, &border);
 
+    // South border
     border.y = m_Maze->GetLength() * 40 + 5;
     SDL_RenderFillRect(m_Renderer, &border);
 
+    // West border
     border.w = 5;
     border.h = m_Maze->GetLength() * 40 + 5;
     border.x = 0;
     border.y = 0;
     SDL_RenderFillRect(m_Renderer, &border);
 
+    // East border
     border.x = m_Maze->GetWidth() * 40 - 5;
     SDL_RenderFillRect(m_Renderer, &border);
 
+    // Render scene
     SDL_RenderPresent(m_Renderer);
 }

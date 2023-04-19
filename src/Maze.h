@@ -5,7 +5,9 @@
 
 enum WALL {
     WALL_NORTH = 0x01,
-    WALL_EAST = 0x02
+    WALL_SOUTH = 0x02,
+    WALL_EAST = 0x04,
+    WALL_WEST = 0x08
 };
 
 class Maze
@@ -19,6 +21,7 @@ public:
     inline unsigned int GetHeight() const { return m_Height; }
     inline unsigned char GetCell(unsigned int x, unsigned int y, unsigned z) { return m_Cells[z][y][x]; }
 
+    void Print();
 private:
     unsigned int m_Width;
     unsigned int m_Length;

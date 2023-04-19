@@ -8,12 +8,14 @@ TextureManager::TextureManager(SDL_Renderer* renderer)
 
 TextureManager::~TextureManager()
 {
+    // Destroy all textures
     for (auto texture : m_Textures)
         SDL_DestroyTexture(texture);
 }
 
 SDL_Texture* TextureManager::LoadImage(const std::string& imagePath)
 {
+    // Load image
     SDL_Surface *image = SDL_LoadBMP(imagePath.c_str());
     if (NULL == image)
     {
@@ -21,6 +23,7 @@ SDL_Texture* TextureManager::LoadImage(const std::string& imagePath)
         return NULL;
     }
 
+    // Create texture from image
     SDL_Texture *texture = SDL_CreateTextureFromSurface(m_Renderer, image);
     SDL_FreeSurface(image);
 
