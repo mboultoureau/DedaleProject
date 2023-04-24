@@ -11,3 +11,14 @@ apt-get install libsdl2-dev libsdl2-image-dev
 X : Length
 Y : Width
 Z : Height
+=======
+
+
+
+```
+make
+```
+
+```
+./build/BlindMaze
+```
