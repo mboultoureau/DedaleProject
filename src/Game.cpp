@@ -23,8 +23,10 @@ void Game::Run()
     SDL_Event event;
     SDL_bool quit = SDL_FALSE;
 
+    // Game loop
     while (!quit)
     {
+        // Event loop
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
