@@ -48,11 +48,11 @@ MazeGenerator::MazeGenerator(unsigned int largeur, unsigned int longueur, unsign
     while (!memeZonePartout())
     {
         casserUnMurAleatoire();
-        affichageMatriceTerminal();
+        //affichageMatriceTerminal();
         //pause de 1 seconde
-        std::this_thread::sleep_for(std::chrono::milliseconds(40));//debug
+        //std::this_thread::sleep_for(std::chrono::milliseconds(100));//debug
     }
-
+    affichageMatriceTerminal();
     //enregistrement de la matrice dans un fichier //TODO faire mieux mdr la c'est nul
     enregistrementMatriceDansFichier();
 
@@ -128,13 +128,13 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
             // si mur nord deja suprimer
             if (murExiste(m_Matrice[x][y][z], 0) == false)
             {
-                std::cout << "deja suprimée" << std::endl;
+                //std::cout << "deja suprimée" << std::endl;
                 return;
             }
             //TODO ajouter l'imposibiliter d'une case avec 1 seul mur ?
             if ((m_Matrice[x][y][z] - 1) == 0 || (m_Matrice[x][y - 1][z] - 2) == 0)
             {
-                std::cout << "supression donne case = a 0, anulation" << std::endl;
+                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
             }
             m_Matrice[x][y][z] -= 1;
@@ -145,11 +145,11 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
             unsigned int zone2 = (x + (m_LargeurX * (y - 1)) + (m_LargeurX * m_LongueurY * z));
             changeValeurZone(zone1, zone2);
             // print debug zone
-            std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
+            //std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
         }
         else
         {
-            std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
+            //std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
         }
     }
     else if (direction == 'S')
@@ -160,12 +160,12 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
             // si mur nord deja suprimer
             if (murExiste(m_Matrice[x][y][z], 1) == false)
             {
-                std::cout << "deja suprimée" << std::endl;
+                //std::cout << "deja suprimée" << std::endl;
                 return;
             }
             if ((m_Matrice[x][y][z] - 2) == 0 || (m_Matrice[x][y + 1][z] - 1) == 0)
             {
-                std::cout << "supression donne case = a 0, anulation" << std::endl;
+                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
             }
             m_Matrice[x][y][z] -= 2;
@@ -175,11 +175,11 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
             unsigned int zone2 = (x + (m_LargeurX * (y + 1)) + (m_LargeurX * m_LongueurY * z));
             changeValeurZone(zone1, zone2);
             // print debug zone
-            std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
+            //std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
         }
         else
         {
-            std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
+            //std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
         }
     }
     else if (direction == 'E')
@@ -189,12 +189,12 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
         {
             if (murExiste(m_Matrice[x][y][z], 2) == false)
             {
-                std::cout << "deja suprimée" << std::endl;
+                //std::cout << "deja suprimée" << std::endl;
                 return;
             }
             if ((m_Matrice[x][y][z] - 4) == 0 || (m_Matrice[x + 1][y][z] - 8) == 0)
             {
-                std::cout << "supression donne case = a 0, anulation" << std::endl;
+                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
             }
             m_Matrice[x][y][z] -= 4;
@@ -204,11 +204,11 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
             unsigned int zone2 = ((x + 1) + (m_LargeurX * y) + (m_LargeurX * m_LongueurY * z));
             changeValeurZone(zone1, zone2);
             // print debug zone
-            std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
+            //std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
         }
         else
         {
-            std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
+            //std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
         }
     }
     else if (direction == 'W')
@@ -218,12 +218,12 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
         {
             if (murExiste(m_Matrice[x][y][z], 3) == false)
             {
-                std::cout << "deja suprimée" << std::endl;
+                //std::cout << "deja suprimée" << std::endl;
                 return;
             }
             if ((m_Matrice[x][y][z] - 8) == 0 || (m_Matrice[x - 1][y][z] - 4) == 0)
             {
-                std::cout << "supression donne case = a 0, anulation" << std::endl;
+                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
             }
             m_Matrice[x][y][z] -= 8;
@@ -233,11 +233,11 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
             unsigned int zone2 = ((x - 1) + (m_LargeurX * y) + (m_LargeurX * m_LongueurY * z));
             changeValeurZone(zone1, zone2);
             // print debug zone
-            std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
+            //std::cout << "zone1 : " << zone1 << " -- zone2 : " << zone2 << std::endl;
         }
         else
         {
-            std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
+            //std::cout << "Erreur suprimeMur impossible -- x : " << x << " -- y : " << y << " -- z : " << z << std::endl;
         }
     }
 }
@@ -262,6 +262,7 @@ bool MazeGenerator::murExiste(int num, int bitPos)
 
 void MazeGenerator::casserUnMurAleatoire()
 {
+    //TODO casser en priorité les murs qui sont dans la même zone
     unsigned int x = randomVar(0, m_LargeurX);
     unsigned int y = randomVar(0, m_LongueurY);
     unsigned int z = randomVar(0, m_HauteurZ);
@@ -347,7 +348,7 @@ void MazeGenerator::enregistrementMatriceDansFichier(){
                 //ajout de la valeur de la cellule dans la commande
                 commande += std::to_string(m_Matrice[x][y][z]);
                 //ajout d'un espace dans la commande
-                commande += ",";
+                commande += " ";
             }
             //ajout d'un retour a la ligne dans la commande
             commande += "\n";
