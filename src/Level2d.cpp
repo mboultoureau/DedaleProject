@@ -1,7 +1,5 @@
 #include "Level2d.h"
 
-#include "SDL2/SDL_image.h"
-
 #include <iostream>
 
 //class MazeGenerator
@@ -11,8 +9,8 @@ Level2d::Level2d(SDL_Renderer* renderer)
 {
     m_Renderer = renderer;
     m_TextureManager = new TextureManager(m_Renderer);
-    m_WallsTexture = m_TextureManager->LoadImage("res/textures/walls.bmp");
-    m_Maze = std::make_unique<Maze>("res/levels/level1.level");
+    m_Maze = std::make_unique<Maze>("res/levels/level2.level", m_Renderer, m_TextureManager);
+    m_Player = std::make_unique<Player>(m_Renderer, m_TextureManager);
 
     //génération du labyrinthe avec le constructeur de MazeGenerator
     MazeGenerator mazeGenerator(10, 10, 1); //Largeur, Longueur, Hauteur
@@ -34,61 +32,8 @@ void Level2d::Render()
     SDL_SetRenderDrawColor(m_Renderer, 242, 242, 242, 255);
     SDL_RenderClear(m_Renderer);
 
-    SDL_Rect wallDestRect;
-    SDL_Rect wallSrcRect;
-
-    wallDestRect.w = 40;
-    wallDestRect.h = 40;
-
-    wallSrcRect.w = 40;
-    wallSrcRect.h = 40;
-    wallSrcRect.y = 0;
-
-    // Draw each cell
-    for (unsigned int z = 0; z < m_Maze->GetHeight(); z++)
-    {
-        for (unsigned int y = 0; y < m_Maze->GetWidth(); y++)
-        {
-            for (unsigned int x = 0; x < m_Maze->GetLength(); x++)
-            {
-                wallDestRect.x = x * 40 + 5;
-                wallDestRect.y = y * 40 + 5;
-
-                // Getting the right cell in the texture
-                wallSrcRect.x = m_Maze->GetCell(x, y, z) * 40;
-
-                SDL_RenderCopy(m_Renderer, m_WallsTexture, &wallSrcRect, &wallDestRect);
-
-                // std::cout << (int)m_Maze->GetCell(x, y, z) << std::endl;
-            }
-        }
-    }
-
-    // std::cout << std::endl << std::endl;
-
-    // Draw north border
-    SDL_Rect border;
-    border.w = 40 * m_Maze->GetWidth();
-    border.h = 5;
-    border.x = 0;
-    border.y = 0;
-    SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(m_Renderer, &border);
-
-    // South border
-    border.y = m_Maze->GetLength() * 40 + 5;
-    SDL_RenderFillRect(m_Renderer, &border);
-
-    // West border
-    border.w = 5;
-    border.h = m_Maze->GetLength() * 40 + 5;
-    border.x = 0;
-    border.y = 0;
-    SDL_RenderFillRect(m_Renderer, &border);
-
-    // East border
-    border.x = m_Maze->GetWidth() * 40 - 5;
-    SDL_RenderFillRect(m_Renderer, &border);
+    m_Maze->Render();
+    m_Player->Render();
 
     // Render scene
     SDL_RenderPresent(m_Renderer);
