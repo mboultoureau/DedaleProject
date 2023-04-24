@@ -52,7 +52,7 @@ MazeGenerator::MazeGenerator(unsigned int largeur, unsigned int longueur, unsign
         //pause de 1 seconde
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));//debug
     }
-    affichageMatriceTerminal();
+    //affichageMatriceTerminal();
     //enregistrement de la matrice dans un fichier //TODO faire mieux mdr la c'est nul
     enregistrementMatriceDansFichier();
 
@@ -127,16 +127,14 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
         {
             // si mur nord deja suprimer
             if (murExiste(m_Matrice[x][y][z], 0) == false)
-            {
-                //std::cout << "deja suprimée" << std::endl;
                 return;
-            }
-            //TODO ajouter l'imposibiliter d'une case avec 1 seul mur ?
+            //pas de case avec 0 mur
             if ((m_Matrice[x][y][z] - 1) == 0 || (m_Matrice[x][y - 1][z] - 2) == 0)
-            {
-                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
-            }
+            //pas de case avec 1 mur
+            /* if (((m_Matrice[x][y][z] - 1) == 1 || (m_Matrice[x][y - 1][z] - 2) == 1) || ((m_Matrice[x][y][z] - 1) == 2 || (m_Matrice[x][y - 1][z] - 2) == 2) || ((m_Matrice[x][y][z] - 1) == 4 || (m_Matrice[x][y - 1][z] - 2) == 4) || ((m_Matrice[x][y][z] - 1) == 8 || (m_Matrice[x][y - 1][z] - 2) == 8))
+                return; */
+                
             m_Matrice[x][y][z] -= 1;
             // Suprime le mur du sud de la cellule du dessus
             m_Matrice[x][y - 1][z] -= 2;
@@ -159,15 +157,12 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
         {
             // si mur nord deja suprimer
             if (murExiste(m_Matrice[x][y][z], 1) == false)
-            {
-                //std::cout << "deja suprimée" << std::endl;
                 return;
-            }
             if ((m_Matrice[x][y][z] - 2) == 0 || (m_Matrice[x][y + 1][z] - 1) == 0)
-            {
-                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
-            }
+            /* if (((m_Matrice[x][y][z] - 2) == 0 || (m_Matrice[x][y + 1][z] - 1) == 1) || ((m_Matrice[x][y][z] - 2) == 0 || (m_Matrice[x][y + 1][z] - 1) == 2) || ((m_Matrice[x][y][z] - 2) == 0 || (m_Matrice[x][y + 1][z] - 1) == 4) || ((m_Matrice[x][y][z] - 2) == 0 || (m_Matrice[x][y + 1][z] - 1) == 8))
+                return; */
+
             m_Matrice[x][y][z] -= 2;
             // Suprime le mur du nord de la cellule du dessous
             m_Matrice[x][y + 1][z] -= 1;
@@ -188,15 +183,12 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
         if (!(x >= m_LargeurX - 1))
         {
             if (murExiste(m_Matrice[x][y][z], 2) == false)
-            {
-                //std::cout << "deja suprimée" << std::endl;
                 return;
-            }
             if ((m_Matrice[x][y][z] - 4) == 0 || (m_Matrice[x + 1][y][z] - 8) == 0)
-            {
-                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
-            }
+            /* if (((m_Matrice[x][y][z] - 4) == 0 || (m_Matrice[x + 1][y][z] - 8) == 1) || ((m_Matrice[x][y][z] - 4) == 0 || (m_Matrice[x + 1][y][z] - 8) == 2) || ((m_Matrice[x][y][z] - 4) == 0 || (m_Matrice[x + 1][y][z] - 8) == 4) || ((m_Matrice[x][y][z] - 4) == 0 || (m_Matrice[x + 1][y][z] - 8) == 8))
+                return; */
+
             m_Matrice[x][y][z] -= 4;
             // Suprime le mur de droite de la cellule de gauche
             m_Matrice[x + 1][y][z] -= 8;
@@ -217,15 +209,12 @@ void MazeGenerator::suprimeMur(unsigned int x, unsigned int y, unsigned int z, c
         if (x != 0)
         {
             if (murExiste(m_Matrice[x][y][z], 3) == false)
-            {
-                //std::cout << "deja suprimée" << std::endl;
                 return;
-            }
             if ((m_Matrice[x][y][z] - 8) == 0 || (m_Matrice[x - 1][y][z] - 4) == 0)
-            {
-                //std::cout << "supression donne case = a 0, anulation" << std::endl;
                 return;
-            }
+            /* if (((m_Matrice[x][y][z] - 8) == 0 || (m_Matrice[x - 1][y][z] - 4) == 1) || ((m_Matrice[x][y][z] - 8) == 0 || (m_Matrice[x - 1][y][z] - 4) == 2) || ((m_Matrice[x][y][z] - 8) == 0 || (m_Matrice[x - 1][y][z] - 4) == 4) || ((m_Matrice[x][y][z] - 8) == 0 || (m_Matrice[x - 1][y][z] - 4) == 8))
+                return; */
+
             m_Matrice[x][y][z] -= 8;
             // Suprime le mur de gauche de la cellule de droite
             m_Matrice[x - 1][y][z] -= 4;
@@ -262,11 +251,45 @@ bool MazeGenerator::murExiste(int num, int bitPos)
 
 void MazeGenerator::casserUnMurAleatoire()
 {
-    //TODO casser en priorité les murs qui sont dans la même zone
+    //TODO casser en priorité les murs qui on 4 murs (valeur de 15)
+
+    for (unsigned int z = 0; z < m_HauteurZ; z++)
+    {
+        for (unsigned int y = 0; y < m_LongueurY; y++)
+        {
+            for (unsigned int x = 0; x < m_LargeurX; x++)
+            {
+                if (m_Matrice[x][y][z] == 15)
+                {
+                    unsigned int direction = randomVar(0, 4);
+                    if (direction == 0)
+                    {
+                        suprimeMur(x, y, z, 'N');
+                    }
+                    else if (direction == 1)
+                    {
+                        suprimeMur(x, y, z, 'S');
+                    }
+                    else if (direction == 2)
+                    {
+                        suprimeMur(x, y, z, 'E');
+                    }
+                    else if (direction == 3)
+                    {
+                        suprimeMur(x, y, z, 'W');
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+
     unsigned int x = randomVar(0, m_LargeurX);
     unsigned int y = randomVar(0, m_LongueurY);
     unsigned int z = randomVar(0, m_HauteurZ);
     unsigned int direction = randomVar(0, 4);
+
 
     if (direction == 0)
     {
@@ -336,6 +359,12 @@ void MazeGenerator::afficherAvecCouleur(int chiffre)
 void MazeGenerator::enregistrementMatriceDansFichier(){
     //utilisation d'une commande systeme pour enregistrer la matrice dans un fichier
     std::string commande = "echo \"";
+    commande += std::to_string(m_LargeurX);
+    commande += " ";
+    commande += std::to_string(m_LongueurY);
+    commande += " ";
+    commande += std::to_string(m_HauteurZ);
+    commande += "\n";
 
     for (unsigned int z = 0; z < m_HauteurZ; z++)
     {
