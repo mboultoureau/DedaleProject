@@ -1,8 +1,10 @@
 SRC = src/*.cpp
 CC = g++
-FLAGS = -Wall -Wextra
+FLAGS = -Wall -Wextra -g
 LINKER = -lSDL2 -lSDL2_image
-OUT = BlindMaze
+OUT = build/BlindMaze
 
 compile:
-	$(CC) $(FLAGS) $(SRC) $(LINKER) -o $(OUT)
+	mkdir -p build
+	$(CC) $(FLAGS) $(SRC) $(LINKER) -o $(OUT) ; echo "./$(OUT)"
+	
