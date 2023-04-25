@@ -3,7 +3,7 @@
 #include "Maze.h"
 #include "Scene.h"
 #include "TextureManager.h"
-#include "Player.h"
+#include "Player2d.h"
 
 #include <memory>
 
@@ -15,9 +15,10 @@ public:
 
     void Update();
     void Render();
+    void HandleEvent(SDL_Event event);
 private:
     std::unique_ptr<Maze> m_Maze;
-    std::unique_ptr<Player> m_Player;
+    std::unique_ptr<Player2d> m_Player;
 
     SDL_Renderer* m_Renderer;
     TextureManager* m_TextureManager;
