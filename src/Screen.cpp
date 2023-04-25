@@ -11,7 +11,7 @@ Screen::Screen()
         return;
     }
 
-    m_Window = SDL_CreateWindow("BlindMaze", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+    m_Window = SDL_CreateWindow("BlindMaze", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 500, SDL_WINDOW_SHOWN);
     if (NULL == m_Window)
     {
         std::cout << "SDL window creation error: " << SDL_GetError() << std::endl;

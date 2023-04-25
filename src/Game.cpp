@@ -10,7 +10,6 @@ Game::Game() : m_Screen()
 
 Game::~Game()
 {
-
 }
 
 void Game::Run()
@@ -31,6 +30,8 @@ void Game::Run()
         {
             if (event.type == SDL_QUIT)
                 quit = SDL_TRUE;
+            
+            currentScene->HandleEvent(event);
         }
 
         if (currentScene)

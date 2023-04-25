@@ -28,7 +28,7 @@ Maze::Maze(const std::string& filepath, SDL_Renderer* renderer, TextureManager* 
         return;
     }
 
-    // Parse size of maze : x, y, z
+    // Parse size of maze : length, width, height
     std::stringstream lineStream(line);
     if (!getline(lineStream, number, ' '))
     {
@@ -101,7 +101,7 @@ Maze::~Maze()
 
 void Maze::Render()
 {
-    SDL_Rect wallDestRect = { 0, 0, 50, 50};
+    SDL_Rect wallDestRect = { 0, 0, 50, 50 };
     SDL_Rect wallSrcRect = { 0, 0, 100, 100 };
 
     // Draw each cell
@@ -111,49 +111,20 @@ void Maze::Render()
         {
             for (unsigned int x = 0; x < m_Length; x++)
             {
-                wallDestRect.x = x * 50 + 5;
-                wallDestRect.y = y * 50 + 5;
+                wallDestRect.x = x * 50;
+                wallDestRect.y = y * 50;
 
                 // Getting the right cell in the texture
                 wallSrcRect.x = m_Cells[z][y][x] * 100;
-                std::cout << (int)m_Cells[z][y][x] << " ";
-
                 SDL_RenderCopy(m_Renderer, m_WallsTexture, &wallSrcRect, &wallDestRect);
-
-                // std::cout << (int)m_Maze->GetCell(x, y, z) << std::endl;
             }
-
-            std::cout << std::endl;
         }
     }
-
-
-
-    std::cout << std::endl << std::endl;
-
-    // Draw north border
-    // SDL_Rect border = { 0, 0, 40 * (int) m_Width, 5};
-    // SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-    // SDL_RenderFillRect(m_Renderer, &border);
-
-    // // South border
-    // border.y = m_Length * 40 + 5;
-    // SDL_RenderFillRect(m_Renderer, &border);
-
-    // // West border
-    // border.w = 5;
-    // border.h = m_Length * 40 + 5;
-    // border.x = 0;
-    // border.y = 0;
-    // SDL_RenderFillRect(m_Renderer, &border);
-
-    // // East border
-    // border.x = m_Width * 40 - 5;
-    // SDL_RenderFillRect(m_Renderer, &border);
 }
 
 void Maze::Print()
 {
+    // Print maze in console
     for (unsigned int z = 0; z < m_Height; z++)
     {
         for (unsigned int y = 0; y < m_Width; y++)
