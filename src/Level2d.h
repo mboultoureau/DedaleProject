@@ -17,9 +17,9 @@ public:
     void Render();
     void HandleEvent(SDL_Event event);
 private:
-    std::unique_ptr<Maze> m_Maze;
     std::unique_ptr<Player2d> m_Player;
 
+    Maze* m_Maze;
     SDL_Renderer* m_Renderer;
     TextureManager* m_TextureManager;
 };

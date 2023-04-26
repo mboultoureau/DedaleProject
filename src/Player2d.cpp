@@ -1,12 +1,13 @@
 #include "Player2d.h"
 
-Player2d::Player2d(SDL_Renderer* renderer, TextureManager* textureManager)
+Player2d::Player2d(SDL_Renderer* renderer, TextureManager* textureManager, Maze* maze)
 {
     m_Renderer = renderer;
     m_TextureManager = textureManager;
     m_Texture = m_TextureManager->LoadImage("res/textures/player.bmp");
+    m_Maze = maze;
 
-    m_Position = { 0, 0, 0 };
+    m_Position = { 5, 5, 0 };
 }
 
 Player2d::~Player2d()
@@ -34,6 +35,11 @@ void Player2d::Render()
 
 void Player2d::Move(int x, int y, int z)
 {
+    // Checking collision
+
+
+
+
     m_Position[0] += x;
     m_Position[1] += y;
     m_Position[2] += z;
