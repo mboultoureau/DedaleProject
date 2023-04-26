@@ -2,7 +2,8 @@
 // Created by emilie on 26/04/2023.
 //
 
-#pragma once //we won't use multiple soundDevice
+#pragma once
+
 #include <AL/al.h>
 #include <AL/alc.h>
 
