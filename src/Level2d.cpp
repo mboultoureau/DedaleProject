@@ -9,8 +9,8 @@ Level2d::Level2d(SDL_Renderer* renderer)
 {
     m_Renderer = renderer;
     m_TextureManager = new TextureManager(m_Renderer);
-    m_Maze = std::make_unique<Maze>("res/levels/level2.level", m_Renderer, m_TextureManager);
-    m_Player = std::make_unique<Player2d>(m_Renderer, m_TextureManager);
+    m_Maze = new Maze("res/levels/level2.level", m_Renderer, m_TextureManager);
+    m_Player = std::make_unique<Player2d>(m_Renderer, m_TextureManager, m_Maze);
 
     // génération du labyrinthe avec le constructeur de MazeGenerator
     MazeGenerator mazeGenerator(10, 10, 1); // Largeur, Longueur, Hauteur

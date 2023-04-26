@@ -116,7 +116,15 @@ void Maze::Render()
 
                 // Getting the right cell in the texture
                 wallSrcRect.x = m_Cells[z][y][x] * 100;
+
+                SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
                 SDL_RenderCopy(m_Renderer, m_WallsTexture, &wallSrcRect, &wallDestRect);
+
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x + 50, wallDestRect.y);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x, wallDestRect.y + 50);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x + 50, wallDestRect.y, wallDestRect.x + 50, wallDestRect.y + 50);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y + 50, wallDestRect.x + 50, wallDestRect.y + 50);
+
             }
         }
     }
