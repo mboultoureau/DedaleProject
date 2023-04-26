@@ -1,7 +1,7 @@
 SRC = src/*.cpp
 CC = g++
 FLAGS = -Wall -Wextra -g
-LINKER = -lSDL2 -lSDL2_image -lopenal
+LINKER = -lSDL2 -lSDL2_image -lopenal -lsndfile
 OUT = build/BlindMaze
 
 compile:
