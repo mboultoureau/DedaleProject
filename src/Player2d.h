@@ -14,11 +14,16 @@ public:
     void Update();
     void Render();
     void Move(int x, int y, int z);
-
+    void Reset();
 
     inline std::array<int, 3> GetPosition() const { return m_Position; }
+    inline int GetScreenWidth() const { return (int)(m_Width * m_Maze->GetCellSize()); }
+    inline int GetScreenHeight() const { return (int)(m_Height * m_Maze->GetCellSize()); }
+    
 private:
     std::array<int, 3> m_Position;
+    float m_Width = 0.6f;
+    float m_Height = 0.6f;
     
     Maze* m_Maze;
     SDL_Renderer* m_Renderer;

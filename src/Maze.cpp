@@ -101,7 +101,7 @@ Maze::~Maze()
 
 void Maze::Render()
 {
-    SDL_Rect wallDestRect = { 0, 0, 50, 50 };
+    SDL_Rect wallDestRect = { 0, 0, (int)m_CellSize, (int)m_CellSize };
     SDL_Rect wallSrcRect = { 0, 0, 100, 100 };
 
     // Draw each cell
@@ -111,8 +111,8 @@ void Maze::Render()
         {
             for (unsigned int x = 0; x < m_Length; x++)
             {
-                wallDestRect.x = x * 50;
-                wallDestRect.y = y * 50;
+                wallDestRect.x = x * m_CellSize;
+                wallDestRect.y = y * m_CellSize;
 
                 // Getting the right cell in the texture
                 wallSrcRect.x = m_Cells[z][y][x] * 100;
@@ -120,10 +120,10 @@ void Maze::Render()
                 SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
                 SDL_RenderCopy(m_Renderer, m_WallsTexture, &wallSrcRect, &wallDestRect);
 
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x + 50, wallDestRect.y);
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x, wallDestRect.y + 50);
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x + 50, wallDestRect.y, wallDestRect.x + 50, wallDestRect.y + 50);
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y + 50, wallDestRect.x + 50, wallDestRect.y + 50);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x + m_CellSize, wallDestRect.y);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x, wallDestRect.y + m_CellSize);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x + m_CellSize, wallDestRect.y, wallDestRect.x + m_CellSize, wallDestRect.y + m_CellSize);
+                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y + m_CellSize, wallDestRect.x + m_CellSize, wallDestRect.y + m_CellSize);
 
             }
         }
