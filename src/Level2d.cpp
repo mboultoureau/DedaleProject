@@ -42,8 +42,7 @@ void Level2d::Render()
 
 void Level2d::HandleEvent(SDL_Event event)
 {
-    int x = 0, y = 0, z = 0;
-    const int speed = 5;
+    unsigned int x = 0, y = 0, z = 0;
 
     switch (event.type)
     {
@@ -51,16 +50,19 @@ void Level2d::HandleEvent(SDL_Event event)
             switch (event.key.keysym.sym)
             {
                 case SDLK_UP:
-                    y = -speed;
+                    y = -1;
                     break;
                 case SDLK_DOWN:
-                    y = speed;
+                    y = 1;
                     break;
                 case SDLK_LEFT:
-                    x = -speed;
+                    x = -1;
                     break;
                 case SDLK_RIGHT:
-                    x = speed;
+                    x = 1;
+                    break;
+                case SDLK_r:
+                    m_Player->Reset();
                     break;
                 default:
                     break;

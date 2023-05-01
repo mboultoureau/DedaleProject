@@ -31,6 +31,7 @@ void Game::Run()
             if (event.type == SDL_QUIT)
                 quit = SDL_TRUE;
             
+            // Event is handled by the current scene
             currentScene->HandleEvent(event);
         }
 
