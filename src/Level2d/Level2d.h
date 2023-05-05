@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Maze.h"
-#include "Scene.h"
-#include "TextureManager.h"
+#include "../Maze.h"
+#include "../Scene.h"
+#include "../TextureManager.h"
 #include "Player2d.h"
 
 #include <memory>

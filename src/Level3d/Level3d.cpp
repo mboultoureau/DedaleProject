@@ -1,11 +1,12 @@
-#include "Level2d.h"
+#include "Level3d.h"
 
 #include <iostream>
+#include <GL/glew.h>
 
 //class MazeGenerator
-#include "MazeGenerator.h"
+#include "../MazeGenerator.h"
 
-Level2d::Level2d(SDL_Renderer* renderer)
+Level3d::Level3d(SDL_Renderer* renderer)
 {
     m_Renderer = renderer;
     m_TextureManager = new TextureManager(m_Renderer);
@@ -16,31 +17,22 @@ Level2d::Level2d(SDL_Renderer* renderer)
     MazeGenerator mazeGenerator(10, 10, 1); // Largeur, Longueur, Hauteur
 }
 
-Level2d::~Level2d()
+Level3d::~Level3d()
 {
     delete m_TextureManager;
 }
 
-void Level2d::Update()
+void Level3d::Update()
 {
     m_Player->Update();
 }
 
-void Level2d::Render()
+void Level3d::Render()
 {
-    // Clear screen
-    SDL_SetRenderDrawColor(m_Renderer, 242, 242, 242, 255);
-    SDL_RenderClear(m_Renderer);
-
-    // Render scene
-    m_Maze->Render();
-    m_Player->Render();
-
-    // Render scene
-    SDL_RenderPresent(m_Renderer);
+    
 }
 
-void Level2d::HandleEvent(SDL_Event event)
+void Level3d::HandleEvent(SDL_Event event)
 {
     unsigned int x = 0, y = 0, z = 0;
 
@@ -71,4 +63,12 @@ void Level2d::HandleEvent(SDL_Event event)
     }
 
     m_Player->Move(x, y, z);
+}
+
+void Level3d::InitOpenGL()
+{
+    GLuint programId = glCreateProgram();
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+
 }

@@ -2,8 +2,8 @@
 
 #include <array>
 
-#include "TextureManager.h"
-#include "Maze.h"
+#include "../TextureManager.h"
+#include "../Maze.h"
 
 class Player2d
 {
