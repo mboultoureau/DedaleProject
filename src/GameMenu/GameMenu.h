@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Scene.h"
-#include "TextureManager.h"
+#include "../Scene.h"
+#include "../TextureManager.h"
 
 class GameMenu : public Scene
 {

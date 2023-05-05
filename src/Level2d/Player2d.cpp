@@ -51,16 +51,16 @@ void Player2d::Move(int x, int y, int z)
         z = 0;
 
     // Checking collisions on walls
-    if (x == 1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_EAST) == WALL_EAST)
+    if (x == 1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_EAST))
         x = 0;
 
-    if (x == -1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_WEST) == WALL_WEST)
+    if (x == -1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_WEST))
         x = 0;
 
-    if (y == 1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_SOUTH) == WALL_SOUTH)
+    if (y == 1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_SOUTH))
         y = 0;
 
-    if (y == -1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_NORTH) == WALL_NORTH)
+    if (y == -1 && (m_Maze->GetCell(m_Position[0], m_Position[1], m_Position[2]) & WALL_NORTH))
         y = 0;
     
 
