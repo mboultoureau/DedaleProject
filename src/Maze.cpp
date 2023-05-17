@@ -4,13 +4,8 @@
 #include <fstream>
 #include <sstream>
 
-#include "SDL2/SDL_image.h"
-
-Maze::Maze(const std::string& filepath, SDL_Renderer* renderer, TextureManager* textureManager)
+Maze::Maze(const std::string& filepath)
 {
-    m_Renderer = renderer;
-    m_WallsTexture = textureManager->LoadImage("res/textures/walls.bmp");
-
     std::ifstream stream(filepath);
     std::string line, number;
 
@@ -96,38 +91,6 @@ Maze::Maze(const std::string& filepath, SDL_Renderer* renderer, TextureManager* 
 
 Maze::~Maze()
 {
-    
-}
-
-void Maze::Render()
-{
-    SDL_Rect wallDestRect = { 0, 0, (int)m_CellSize, (int)m_CellSize };
-    SDL_Rect wallSrcRect = { 0, 0, 100, 100 };
-
-    // Draw each cell
-    for (unsigned int z = 0; z < m_Height; z++)
-    {
-        for (unsigned int y = 0; y < m_Width; y++)
-        {
-            for (unsigned int x = 0; x < m_Length; x++)
-            {
-                wallDestRect.x = x * m_CellSize;
-                wallDestRect.y = y * m_CellSize;
-
-                // Getting the right cell in the texture
-                wallSrcRect.x = m_Cells[z][y][x] * 100;
-
-                SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
-                SDL_RenderCopy(m_Renderer, m_WallsTexture, &wallSrcRect, &wallDestRect);
-
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x + m_CellSize, wallDestRect.y);
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y, wallDestRect.x, wallDestRect.y + m_CellSize);
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x + m_CellSize, wallDestRect.y, wallDestRect.x + m_CellSize, wallDestRect.y + m_CellSize);
-                SDL_RenderDrawLine(m_Renderer, wallDestRect.x, wallDestRect.y + m_CellSize, wallDestRect.x + m_CellSize, wallDestRect.y + m_CellSize);
-
-            }
-        }
-    }
 }
 
 void Maze::Print()
