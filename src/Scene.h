@@ -108,7 +108,7 @@ public:
     void onDrawFrame();
 
     /** retourne la distance entre les murs et la caméra **/
-    float get_wall_distance(float limit);
+    void get_wall_distance(float limit);
 
 
 

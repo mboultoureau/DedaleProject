@@ -237,7 +237,7 @@ void Scene::onKeyDown(unsigned char code)
 }
 
 
-float Scene::get_wall_distance(float limit){
+void Scene::get_wall_distance(float limit){
     for (int j = 0; j < m_Walls.size(); j++){
         vec3 position = m_Walls[j]->getPosition();
         for(unsigned int i = 0; i <3; i+=2){
@@ -251,28 +251,26 @@ float Scene::get_wall_distance(float limit){
                 std::cout << "Type mur :" << m_Walls[j]->getType() <<"\n";
                 std::cout << differencePlus << "m \n";
                 std::cout << differenceMoins << "m \n";
-                return 1.0;
+                std::cout << m_Walls.size();
+
 
                 // obtenir la position relative à la caméra
                 vec4 pos = vec4::fromValues(0,0,0,1);   // point en (0,0,0)
                 vec4::transformMat4(pos, pos, m_MatVM);
-                //std::cout << "Position = " << vec4::str(pos);
+                std::cout << "Position = " << vec4::str(pos);
                 alSource3f(source, AL_POSITION, pos[0], pos[1], pos[2]);
 
                 // obtenir la direction relative à la caméra
                 vec4 dir = vec4::fromValues(0,0,1,0);   // vecteur +z
                 vec4::transformMat4(dir, dir, m_MatVM);
-                //std::cout << "    Direction = " << vec4::str(dir) << std::endl;
+                std::cout << "    Direction = " << vec4::str(dir) << std::endl;
                 alSource3f(source, AL_DIRECTION, dir[0], dir[1], dir[2]);
             }
-            else {
-                return 2.0;
-            }
+
         }
     }
     //std::cout << m_InvPosCam[0] << " " << m_InvPosCam[1] << " " << m_InvPosCam[2];
 
-    return 0.0;
 }
 
 
