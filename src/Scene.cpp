@@ -19,31 +19,6 @@ Scene::Scene()
 {
     std::string soundpathname = "data/wall.wav";
 
-    // ouverture du flux audio à placer dans le buffer
-    buffer = alutCreateBufferFromFile(soundpathname.c_str());
-    if (buffer == AL_NONE) {
-        std::cerr << "unable to open file " << soundpathname << std::endl;
-        alGetError();
-        throw std::runtime_error("file not found or not readable");
-    }
-
-    // lien buffer -> source
-    alGenSources(1, &source);
-    alSourcei(source, AL_BUFFER, buffer);
-
-    // propriétés de la source à l'origine
-    alSource3f(source, AL_POSITION, 0, 0, 0); // on positionne la source à (0,0,0) par défaut
-    alSource3f(source, AL_VELOCITY, 0, 0, 0);
-    alSourcei(source, AL_LOOPING, AL_TRUE);
-    // dans un cone d'angle [-inner/2,inner/2] il n'y a pas d'attenuation
-    alSourcef(source, AL_CONE_INNER_ANGLE, 20);
-    // dans un cone d'angle [-outer/2,outer/2] il y a une attenuation linéaire entre 0 et le gain
-    alSourcef(source, AL_CONE_OUTER_GAIN, 0);
-    alSourcef(source, AL_CONE_OUTER_ANGLE, 80);
-    // à l'extérieur de [-outer/2,outer/2] il y a une attenuation totale
-
-    //alSourcePlay(source);
-
     // importer le labyrinthe
     m_Maze = new Maze("data/level2.level");
 
@@ -253,6 +228,33 @@ void Scene::get_wall_distance(float limit){
                 std::cout << differenceMoins << "m \n";
                 std::cout << m_Walls.size();
 
+                std::string soundpathname = "data/wall.wav";
+
+                // ouverture du flux audio à placer dans le buffer
+                buffer = alutCreateBufferFromFile(soundpathname.c_str());
+                if (buffer == AL_NONE) {
+                    std::cerr << "unable to open file " << soundpathname << std::endl;
+                    alGetError();
+                    throw std::runtime_error("file not found or not readable");
+                }
+
+                // lien buffer -> source
+                alGenSources(1, &source);
+                alSourcei(source, AL_BUFFER, buffer);
+
+                // propriétés de la source à l'origine
+                alSource3f(source, AL_POSITION, 0, 0, 0); // on positionne la source à (0,0,0) par défaut
+                alSource3f(source, AL_VELOCITY, 0, 0, 0);
+                alSourcei(source, AL_LOOPING, AL_TRUE);
+                // dans un cone d'angle [-inner/2,inner/2] il n'y a pas d'attenuation
+                alSourcef(source, AL_CONE_INNER_ANGLE, 20);
+                // dans un cone d'angle [-outer/2,outer/2] il y a une attenuation linéaire entre 0 et le gain
+                alSourcef(source, AL_CONE_OUTER_GAIN, 0);
+                alSourcef(source, AL_CONE_OUTER_ANGLE, 80);
+                // à l'extérieur de [-outer/2,outer/2] il y a une attenuation totale
+
+                alSourcePlay(source);
+
 
                 // obtenir la position relative à la caméra
                 vec4 pos = vec4::fromValues(0,0,0,1);   // point en (0,0,0)
@@ -279,7 +281,7 @@ void Scene::get_wall_distance(float limit){
  */
 void Scene::onDrawFrame()
 {
-
+    this->get_wall_distance(2.0);
 
     // Calcul vitesse saut
     float dt = Utils::Time - m_PredTime;
@@ -322,7 +324,7 @@ void Scene::onDrawFrame()
     // dessiner le canard en mouvement
     //m_Duck->onRender(m_MatP, m_MatV);
 
-    this->get_wall_distance(2.0);
+
 
 }
 
