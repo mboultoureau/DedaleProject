@@ -20,6 +20,9 @@ class Scene
 {
 private:
 
+    /** buffers pour la gestion du son */
+    ALuint buffer, source;
+
     // objets de la scène
     Cube* m_Cube;
     std::vector<Wall*> m_Walls;
