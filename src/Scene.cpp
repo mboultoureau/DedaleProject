@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <cmath>
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -32,25 +33,25 @@ Scene::Scene()
             {
                 // Check all sides
                 if (m_Maze->GetCell(x, y, z) & WALL_NORTH) {
-                    m_Walls.push_back(new Wall("data/white_noise.wav"));
+                    m_Walls.push_back(new Wall("data/wall.wav"));
                     m_Walls.back()->setPosition(vec3::fromValues(x * 5.0, 0, y * 5.0 - 2.5));
                     m_Walls.back()->setType(WALL_NORTH);
                 }
 
                 if (m_Maze->GetCell(x, y, z) & WALL_SOUTH) {
-                    m_Walls.push_back(new Wall("data/white_noise.wav"));
+                    m_Walls.push_back(new Wall("data/wall.wav"));
                     m_Walls.back()->setPosition(vec3::fromValues(x * 5.0, 0, y * 5.0 + 2.5));
                     m_Walls.back()->setType(WALL_SOUTH);
                 }
 
                 if (m_Maze->GetCell(x, y, z) & WALL_EAST) {
-                    m_Walls.push_back(new Wall("data/white_noise.wav"));
+                    m_Walls.push_back(new Wall("data/wall.wav"));
                     m_Walls.back()->setPosition(vec3::fromValues(x * 5.0 + 2.5, 0, y * 5.0));
                     m_Walls.back()->setType(WALL_EAST);
                 }
 
                 if (m_Maze->GetCell(x, y, z) & WALL_WEST) {
-                    m_Walls.push_back(new Wall("data/white_noise.wav"));
+                    m_Walls.push_back(new Wall("data/wall.wav"));
                     m_Walls.back()->setPosition(vec3::fromValues(x * 5.0 - 2.5, 0, y * 5.0));
                     m_Walls.back()->setType(WALL_WEST);
                 }
@@ -58,7 +59,7 @@ Scene::Scene()
         }
     }
 
-    m_Duck = new Duck();
+    //m_Duck = new Duck();
     m_Ground = new Ground();
 
     // caractéristiques de la lampe
@@ -167,19 +168,27 @@ void Scene::onKeyDown(unsigned char code)
 
     switch (code) {
         case GLFW_KEY_W: // avant
-            mvt = vec3::fromValues(0.0f, 0.0f, +step);
+            //if (this->get_wall_distance(0.1)==2.0){
+                mvt = vec3::fromValues(0.0f, 0.0f, +step);
+            //}
             break;
 
         case GLFW_KEY_S: // avant
-            mvt = vec3::fromValues(0.0f, 0.0f, -step);
+            //if (this->get_wall_distance(0.1)==2.0) {
+                mvt = vec3::fromValues(0.0f, 0.0f, -step);
+            //}
             break;
 
         case GLFW_KEY_A: // droite
-            mvt = vec3::fromValues(+step, 0.0f, 0.0f);
+            //if (this->get_wall_distance(0.1)==2.0) {
+                mvt = vec3::fromValues(+step, 0.0f, 0.0f);
+            //}
             break;
 
         case GLFW_KEY_D: // gauche
-            mvt = vec3::fromValues(-step, 0.0f, 0.0f);
+            //if (this->get_wall_distance(0.1)==2.0) {
+                mvt = vec3::fromValues(-step, 0.0f, 0.0f);
+            //}
             break;
         // case GLFW_KEY_Q: // haut
         //     vec3::transformMat4(offset, vec3::fromValues(0, -0.1, 0), m_MatTMP);
@@ -198,6 +207,33 @@ void Scene::onKeyDown(unsigned char code)
     vec3::add(m_InvPosCam, m_InvPosCam, mvt);
 
     m_InvPosCam[1] = Utils::clamp(m_InvPosCam[1], -9.0, 0.0);
+}
+
+
+float Scene::get_wall_distance(float limit){
+    for (int j = 0; j < m_Walls.size(); j++){
+        vec3 position = m_Walls[j]->getPosition();
+        for(unsigned int i = 0; i <3; i+=2){
+            float differenceMoins = std::abs(position[i] - m_InvPosCam[i]);
+            //std::cout << differenceMoins << "m \n";
+            float differencePlus = std::abs(position[i] + m_InvPosCam[i]);
+            //std::cout << differencePlus << "m \n";
+
+            if ((differenceMoins<limit)||(differencePlus<limit)){
+                std::cout << "Mur Proche ";
+                std::cout << "Type mur :" << m_Walls[j]->getType() <<"\n";
+                std::cout << differencePlus << "m \n";
+                std::cout << differenceMoins << "m \n";
+                return 1.0;
+            }
+            else {
+                return 2.0;
+            }
+        }
+    }
+    //std::cout << m_InvPosCam[0] << " " << m_InvPosCam[1] << " " << m_InvPosCam[2];
+
+    return 0.0;
 }
 
 
@@ -245,7 +281,9 @@ void Scene::onDrawFrame()
     }
 
     // dessiner le canard en mouvement
-    m_Duck->onRender(m_MatP, m_MatV);
+    //m_Duck->onRender(m_MatP, m_MatV);
+
+    this->get_wall_distance(2.0);
 
 }
 

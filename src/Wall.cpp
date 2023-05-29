@@ -110,6 +110,8 @@ Wall::Wall(std::string soundpathname): Mesh("wall")
         throw std::runtime_error("file not found or not readable");
     }
 
+    //std::string soundpathname = "data/wall.wav";
+
     // lien buffer -> source
     alGenSources(1, &source);
     alSourcei(source, AL_BUFFER, buffer);
@@ -125,7 +127,7 @@ Wall::Wall(std::string soundpathname): Mesh("wall")
     alSourcef(source, AL_CONE_OUTER_ANGLE, 80);
     // à l'extérieur de [-outer/2,outer/2] il y a une attenuation totale
 
-    alSourcePlay(source);
+    //alSourcePlay(source);
 }
 
 
@@ -160,19 +162,7 @@ void Wall::onRender(const mat4& matP, const mat4& matV)
 
     onDraw(matP, matVM);
 
-    /** sonorisation OpenAL **/
 
-    // obtenir la position relative à la caméra
-    // vec4 pos = vec4::fromValues(0,0,0,1);   // point en (0,0,0)
-    // vec4::transformMat4(pos, pos, matVM);
-    // //std::cout << "Position = " << vec4::str(pos);
-    // alSource3f(source, AL_POSITION, pos[0], pos[1], pos[2]);
-
-    // // obtenir la direction relative à la caméra
-    // vec4 dir = vec4::fromValues(0,0,1,0);   // vecteur +z
-    // vec4::transformMat4(dir, dir, matVM);
-    // //std::cout << "    Direction = " << vec4::str(dir) << std::endl;
-    // alSource3f(source, AL_DIRECTION, dir[0], dir[1], dir[2]);
 }
 
 

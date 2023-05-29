@@ -103,6 +103,12 @@ public:
 
     /** Dessine l'image courante */
     void onDrawFrame();
+
+    /** retourne la distance entre les murs et la caméra **/
+    float get_wall_distance(float limit);
+
+
+
 };
 
 #endif
