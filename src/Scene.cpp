@@ -209,6 +209,58 @@ void Scene::onKeyDown(unsigned char code)
     vec3::add(m_InvPosCam, m_InvPosCam, mvt);
 
     m_InvPosCam[1] = Utils::clamp(m_InvPosCam[1], -9.0, 0.0);
+
+    // check collision
+    // we check collision with every wall
+    // TODO: performance issue: check collision only with walls near the camera
+
+    const float depth = 0.05;
+    const float width = 2.5;
+    const float height = 2.0;
+
+    for (Wall* wall : m_Walls) {
+
+        vec3 wall_position = wall->getPosition();
+        float x1, x2, y1, y2;
+
+        // check collision with the wall (we don't check height)
+        switch (wall->getType()) {
+            case WALL_NORTH:
+                x1 = -wall_position[0] - width;
+                x2 = -wall_position[0] + width;
+                y1 = -wall_position[2] - depth * 10;
+                y2 = -wall_position[2] + depth * 10;
+                break;
+            case WALL_SOUTH:
+                x1 = -wall_position[0] - width;
+                x2 = -wall_position[0] + width;
+                y1 = -wall_position[2] - depth * 10;
+                y2 = -wall_position[2] + depth * 10;
+                break;
+            case WALL_EAST:
+                x1 = -wall_position[0] - depth * 10;
+                x2 = -wall_position[0] + depth * 10;
+                y1 = -wall_position[2] - width;
+                y2 = -wall_position[2] + width;
+                break;
+            case WALL_WEST:
+                x1 = -wall_position[0] - depth * 10;
+                x2 = -wall_position[0] + depth * 10;
+                y1 = -wall_position[2] - width;
+                y2 = -wall_position[2] + width;
+                break;
+        }
+        
+            std::cout << "Player position: " << m_InvPosCam[0] << " " << m_InvPosCam[1] << " " << m_InvPosCam[2] << std::endl;
+            // Print x1, x2, y1, y2
+            std::cout << "x1: " << x1 << " x2: " << x2 << " y1: " << y1 << " y2: " << y2 << std::endl;
+
+        if (m_InvPosCam[0] > x1 && m_InvPosCam[0] < x2 && m_InvPosCam[2] > y1 && m_InvPosCam[2] < y2) {
+            std::cout << "Collision with wall" << std::endl;
+            vec3::subtract(m_InvPosCam, m_InvPosCam, mvt);
+        }
+    }
+
 }
 
 
@@ -222,21 +274,21 @@ void Scene::get_wall_distance(float limit){
             //std::cout << differencePlus << "m \n";
 
             if ((differenceMoins<limit)||(differencePlus<limit)){
-                std::cout << "Mur Proche ";
-                std::cout << "Type mur :" << m_Walls[j]->getType() <<"\n";
-                std::cout << differencePlus << "m \n";
-                std::cout << differenceMoins << "m \n";
-                std::cout << m_Walls.size();
+                // std::cout << "Mur Proche ";
+                // std::cout << "Type mur :" << m_Walls[j]->getType() <<"\n";
+                // std::cout << differencePlus << "m \n";
+                // std::cout << differenceMoins << "m \n";
+                // std::cout << m_Walls.size();
 
                 std::string soundpathname = "data/wall.wav";
 
                 // ouverture du flux audio à placer dans le buffer
-                buffer = alutCreateBufferFromFile(soundpathname.c_str());
-                if (buffer == AL_NONE) {
-                    std::cerr << "unable to open file " << soundpathname << std::endl;
-                    alGetError();
-                    throw std::runtime_error("file not found or not readable");
-                }
+                // buffer = alutCreateBufferFromFile(soundpathname.c_str());
+                // if (buffer == AL_NONE) {
+                //     std::cerr << "unable to open file " << soundpathname << std::endl;
+                //     alGetError();
+                //     throw std::runtime_error("file not found or not readable");
+                // }
 
                 // lien buffer -> source
                 alGenSources(1, &source);
@@ -259,13 +311,13 @@ void Scene::get_wall_distance(float limit){
                 // obtenir la position relative à la caméra
                 vec4 pos = vec4::fromValues(0,0,0,1);   // point en (0,0,0)
                 vec4::transformMat4(pos, pos, m_MatVM);
-                std::cout << "Position = " << vec4::str(pos);
+                // std::cout << "Position = " << vec4::str(pos);
                 alSource3f(source, AL_POSITION, pos[0], pos[1], pos[2]);
 
                 // obtenir la direction relative à la caméra
                 vec4 dir = vec4::fromValues(0,0,1,0);   // vecteur +z
                 vec4::transformMat4(dir, dir, m_MatVM);
-                std::cout << "    Direction = " << vec4::str(dir) << std::endl;
+                // std::cout << "    Direction = " << vec4::str(dir) << std::endl;
                 alSource3f(source, AL_DIRECTION, dir[0], dir[1], dir[2]);
             }
 
