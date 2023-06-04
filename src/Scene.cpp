@@ -11,13 +11,19 @@
 
 #include <utils.h>
 
+#include<unistd.h>
+#include <chrono>
+#include <thread>
+
+
 #include "Scene.h"
 
 
 /** constructeur */
 Scene::Scene()
 {
-    std::string soundpathname = "data/wall.wav";
+
+
 
     // importer le labyrinthe
     m_Maze = new Maze("data/level2.level");
@@ -170,27 +176,19 @@ void Scene::onKeyDown(unsigned char code)
 
     switch (code) {
         case GLFW_KEY_W: // avant
-            //if (this->get_wall_distance(0.1)==2.0){
                 mvt = vec3::fromValues(0.0f, 0.0f, +step);
-            //}
             break;
 
         case GLFW_KEY_S: // avant
-            //if (this->get_wall_distance(0.1)==2.0) {
                 mvt = vec3::fromValues(0.0f, 0.0f, -step);
-            //}
             break;
 
         case GLFW_KEY_A: // droite
-            //if (this->get_wall_distance(0.1)==2.0) {
                 mvt = vec3::fromValues(+step, 0.0f, 0.0f);
-            //}
             break;
 
         case GLFW_KEY_D: // gauche
-            //if (this->get_wall_distance(0.1)==2.0) {
                 mvt = vec3::fromValues(-step, 0.0f, 0.0f);
-            //}
             break;
         // case GLFW_KEY_Q: // haut
         //     vec3::transformMat4(offset, vec3::fromValues(0, -0.1, 0), m_MatTMP);
@@ -251,20 +249,80 @@ void Scene::onKeyDown(unsigned char code)
                 break;
         }
         
-            std::cout << "Player position: " << m_InvPosCam[0] << " " << m_InvPosCam[1] << " " << m_InvPosCam[2] << std::endl;
+            //std::cout << "Player position: " << m_InvPosCam[0] << " " << m_InvPosCam[1] << " " << m_InvPosCam[2] << std::endl;
             // Print x1, x2, y1, y2
-            std::cout << "x1: " << x1 << " x2: " << x2 << " y1: " << y1 << " y2: " << y2 << std::endl;
+            //std::cout << "x1: " << x1 << " x2: " << x2 << " y1: " << y1 << " y2: " << y2 << std::endl;
 
         if (m_InvPosCam[0] > x1 && m_InvPosCam[0] < x2 && m_InvPosCam[2] > y1 && m_InvPosCam[2] < y2) {
-            std::cout << "Collision with wall" << std::endl;
+            //std::cout << "Collision with wall" << std::endl;
             vec3::subtract(m_InvPosCam, m_InvPosCam, mvt);
         }
     }
+    this->get_wall_distance(0.5);
+
+}
+
+void Scene::PlaySound(float value1, float value2, float value3){
+
+    std::chrono::steady_clock::time_point lastSoundTime;
+    int soundDelay = 1000; // 1 second
+
+    // Check if enough time has passed since the last sound
+    std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+    std::chrono::milliseconds timeDifference = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastSoundTime);
+    if (timeDifference.count() < soundDelay) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(soundDelay - timeDifference.count()));
+    }
+
+
+    // Update the last sound time to the current time
+    lastSoundTime = std::chrono::steady_clock::now();
+
+    // ouverture du flux audio à placer dans le buffer
+    std::string soundpathname = "data/wall.wav";
+    buffer = alutCreateBufferFromFile(soundpathname.c_str());
+    if (buffer == AL_NONE) {
+        std::cerr << "unable to open file " << soundpathname << std::endl;
+        alGetError();
+        throw std::runtime_error("file not found or not readable");
+    }
+
+    // lien buffer -> source
+    alGenSources(1, &source);
+    alSourcei(source, AL_BUFFER, buffer);
+
+    // propriétés de la source à l'origine
+    alSource3f(source, AL_POSITION, value1, value1, value1); // on positionne la source à (0,0,0) par défaut
+    alSource3f(source, AL_VELOCITY, 0, 0, 0);
+    alSourcei(source, AL_LOOPING, AL_FALSE);
+    // dans un cone d'angle [-inner/2,inner/2] il n'y a pas d'attenuation
+    alSourcef(source, AL_CONE_INNER_ANGLE, 80);
+    // dans un cone d'angle [-outer/2,outer/2] il y a une attenuation linéaire entre 0 et le gain
+    alSourcef(source, AL_CONE_OUTER_GAIN, 0);
+    alSourcef(source, AL_CONE_OUTER_ANGLE, 120);
+    // à l'extérieur de [-outer/2,outer/2] il y a une attenuation totale
+
+    ALint sourceState;
+    alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
+    if (sourceState != AL_PLAYING){
+        alSourcePlay(source);
+        std::cout << "Joue son \n";
+    }
+
+
+    if (sourceState == AL_STOPPED){
+        // Delete the source and buffer after the sound has finished playing
+        alDeleteSources(1, &source);
+        alDeleteBuffers(1, &buffer);
+        std::cout << "Delete source \n";
+    }
+
 
 }
 
 
 void Scene::get_wall_distance(float limit){
+
     for (int j = 0; j < m_Walls.size(); j++){
         vec3 position = m_Walls[j]->getPosition();
         for(unsigned int i = 0; i <3; i+=2){
@@ -274,58 +332,13 @@ void Scene::get_wall_distance(float limit){
             //std::cout << differencePlus << "m \n";
 
             if ((differenceMoins<limit)||(differencePlus<limit)){
-                // std::cout << "Mur Proche ";
-                // std::cout << "Type mur :" << m_Walls[j]->getType() <<"\n";
-                // std::cout << differencePlus << "m \n";
-                // std::cout << differenceMoins << "m \n";
-                // std::cout << m_Walls.size();
-
-                std::string soundpathname = "data/wall.wav";
-
-                // ouverture du flux audio à placer dans le buffer
-                // buffer = alutCreateBufferFromFile(soundpathname.c_str());
-                // if (buffer == AL_NONE) {
-                //     std::cerr << "unable to open file " << soundpathname << std::endl;
-                //     alGetError();
-                //     throw std::runtime_error("file not found or not readable");
-                // }
-
-                // lien buffer -> source
-                alGenSources(1, &source);
-                alSourcei(source, AL_BUFFER, buffer);
-
-                // propriétés de la source à l'origine
-                alSource3f(source, AL_POSITION, 0, 0, 0); // on positionne la source à (0,0,0) par défaut
-                alSource3f(source, AL_VELOCITY, 0, 0, 0);
-                alSourcei(source, AL_LOOPING, AL_TRUE);
-                // dans un cone d'angle [-inner/2,inner/2] il n'y a pas d'attenuation
-                alSourcef(source, AL_CONE_INNER_ANGLE, 20);
-                // dans un cone d'angle [-outer/2,outer/2] il y a une attenuation linéaire entre 0 et le gain
-                alSourcef(source, AL_CONE_OUTER_GAIN, 0);
-                alSourcef(source, AL_CONE_OUTER_ANGLE, 80);
-                // à l'extérieur de [-outer/2,outer/2] il y a une attenuation totale
-
-                alSourcePlay(source);
-
-
-                // obtenir la position relative à la caméra
-                vec4 pos = vec4::fromValues(0,0,0,1);   // point en (0,0,0)
-                vec4::transformMat4(pos, pos, m_MatVM);
-                // std::cout << "Position = " << vec4::str(pos);
-                alSource3f(source, AL_POSITION, pos[0], pos[1], pos[2]);
-
-                // obtenir la direction relative à la caméra
-                vec4 dir = vec4::fromValues(0,0,1,0);   // vecteur +z
-                vec4::transformMat4(dir, dir, m_MatVM);
-                // std::cout << "    Direction = " << vec4::str(dir) << std::endl;
-                alSource3f(source, AL_DIRECTION, dir[0], dir[1], dir[2]);
+                this->PlaySound(position[0],position[1],position[2]);
+                //std::cout << "Mur proche \n";
             }
-
         }
     }
-    //std::cout << m_InvPosCam[0] << " " << m_InvPosCam[1] << " " << m_InvPosCam[2];
-
 }
+
 
 
 /**
@@ -333,8 +346,6 @@ void Scene::get_wall_distance(float limit){
  */
 void Scene::onDrawFrame()
 {
-    this->get_wall_distance(2.0);
-
     // Calcul vitesse saut
     float dt = Utils::Time - m_PredTime;
     m_Vy -= 9.81 * dt;
@@ -376,8 +387,6 @@ void Scene::onDrawFrame()
     // dessiner le canard en mouvement
     //m_Duck->onRender(m_MatP, m_MatV);
 
-
-
 }
 
 
@@ -387,4 +396,5 @@ Scene::~Scene()
     // delete m_Cube;
     // delete m_Duck;
     delete m_Ground;
+
 }

@@ -111,6 +111,8 @@ public:
     /** retourne la distance entre les murs et la caméra **/
     void get_wall_distance(float limit);
 
+    void PlaySound(float value1, float value2, float value3);
+
 
 
 };
