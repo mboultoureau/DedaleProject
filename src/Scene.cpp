@@ -190,6 +190,23 @@ void Scene::onKeyDown(unsigned char code)
         case GLFW_KEY_D: // gauche
                 mvt = vec3::fromValues(-step, 0.0f, 0.0f);
             break;
+
+        case GLFW_KEY_Z: // nord
+            std::cout << "Check nord \n";
+            this->CheckWall(WALL_NORTH,2.0);
+            break;
+        case GLFW_KEY_X: // est
+            std::cout << "Check est \n";
+            this->CheckWall(WALL_EAST,2.0);
+            break;
+        case GLFW_KEY_C: // sud
+            std::cout << "Check sud \n";
+            this->CheckWall(WALL_SOUTH,2.0);
+            break;
+        case GLFW_KEY_V: // ouest
+            std::cout << "Check ouest \n";
+            this->CheckWall(WALL_WEST,2.0);
+            break;
         // case GLFW_KEY_Q: // haut
         //     vec3::transformMat4(offset, vec3::fromValues(0, -0.1, 0), m_MatTMP);
         //     break;
@@ -258,8 +275,25 @@ void Scene::onKeyDown(unsigned char code)
             vec3::subtract(m_InvPosCam, m_InvPosCam, mvt);
         }
     }
-    this->get_wall_distance(0.5);
+    //this->get_wall_distance(0.5);
 
+}
+
+void Scene::CheckWall(WALL_TYPE type, float limit){
+    for (int j = 0; j < m_Walls.size(); j++){
+        vec3 position = m_Walls[j]->getPosition();
+        for(unsigned int i = 0; i <3; i+=2){
+            float differenceMoins = std::abs(position[i] - m_InvPosCam[i]);
+            //std::cout << differenceMoins << "m \n";
+            float differencePlus = std::abs(position[i] + m_InvPosCam[i]);
+            //std::cout << differencePlus << "m \n";
+
+            if ((differenceMoins<limit)||(differencePlus<limit)&&(m_Walls[j]->getType()==type)){
+                this->PlaySound(0,0,0);
+                //std::cout << "Mur proche \n";
+            }
+        }
+    }
 }
 
 void Scene::PlaySound(float value1, float value2, float value3){
@@ -338,6 +372,8 @@ void Scene::get_wall_distance(float limit){
         }
     }
 }
+
+
 
 
 
