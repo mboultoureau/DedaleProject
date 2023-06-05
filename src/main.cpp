@@ -161,6 +161,7 @@ int main(int argc,char **argv)
     std::cout << "Usage:" << std::endl;
     std::cout << "Left button to rotate object" << std::endl;
     std::cout << "Q,D (axis x) A,W (axis y) Z,S (axis z) keys to move" << std::endl;
+    std::cout << "A key to check for walls with sound" << std::endl;
 
     // boucle principale
     onSurfaceChanged(window, 640,480);

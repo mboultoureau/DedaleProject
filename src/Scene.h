@@ -113,7 +113,7 @@ public:
 
     void PlaySound(float value1, float value2, float value3);
 
-    void CheckWall(WALL_TYPE type, float limit);
+    void CheckWall(float limit);
 
 
 

@@ -191,22 +191,11 @@ void Scene::onKeyDown(unsigned char code)
                 mvt = vec3::fromValues(-step, 0.0f, 0.0f);
             break;
 
-        case GLFW_KEY_Z: // nord
-            std::cout << "Check nord \n";
-            this->CheckWall(WALL_NORTH,2.0);
+        case GLFW_KEY_Q: // check walls
+            std::cout << "Check walls \n";
+            this->CheckWall(0.2);
             break;
-        case GLFW_KEY_X: // est
-            std::cout << "Check est \n";
-            this->CheckWall(WALL_EAST,2.0);
-            break;
-        case GLFW_KEY_C: // sud
-            std::cout << "Check sud \n";
-            this->CheckWall(WALL_SOUTH,2.0);
-            break;
-        case GLFW_KEY_V: // ouest
-            std::cout << "Check ouest \n";
-            this->CheckWall(WALL_WEST,2.0);
-            break;
+
         // case GLFW_KEY_Q: // haut
         //     vec3::transformMat4(offset, vec3::fromValues(0, -0.1, 0), m_MatTMP);
         //     break;
@@ -279,17 +268,20 @@ void Scene::onKeyDown(unsigned char code)
 
 }
 
-void Scene::CheckWall(WALL_TYPE type, float limit){
+void Scene::CheckWall(float limit){
     for (int j = 0; j < m_Walls.size(); j++){
         vec3 position = m_Walls[j]->getPosition();
         for(unsigned int i = 0; i <3; i+=2){
             float differenceMoins = std::abs(position[i] - m_InvPosCam[i]);
-            //std::cout << differenceMoins << "m \n";
             float differencePlus = std::abs(position[i] + m_InvPosCam[i]);
-            //std::cout << differencePlus << "m \n";
 
-            if ((differenceMoins<limit)||(differencePlus<limit)&&(m_Walls[j]->getType()==type)){
-                this->PlaySound(0,0,0);
+
+            if ((differenceMoins<limit)||(differencePlus<limit)){
+                std::cout << differenceMoins << "m \n";
+                std::cout << differencePlus << "m \n";
+                //this->PlaySound(position[0],position[1],0);
+                this->PlaySound(-1,0,0);
+                std::cout << position[0] << position[1] << position[2] << "\n";
                 //std::cout << "Mur proche \n";
             }
         }
@@ -326,7 +318,7 @@ void Scene::PlaySound(float value1, float value2, float value3){
     alSourcei(source, AL_BUFFER, buffer);
 
     // propriétés de la source à l'origine
-    alSource3f(source, AL_POSITION, value1, value1, value1); // on positionne la source à (0,0,0) par défaut
+    alSource3f(source, AL_POSITION, value1, value1, value1); // on positionne la source sur la position du mur
     alSource3f(source, AL_VELOCITY, 0, 0, 0);
     alSourcei(source, AL_LOOPING, AL_FALSE);
     // dans un cone d'angle [-inner/2,inner/2] il n'y a pas d'attenuation
@@ -335,6 +327,11 @@ void Scene::PlaySound(float value1, float value2, float value3){
     alSourcef(source, AL_CONE_OUTER_GAIN, 0);
     alSourcef(source, AL_CONE_OUTER_ANGLE, 120);
     // à l'extérieur de [-outer/2,outer/2] il y a une attenuation totale
+
+    float listenerOrientation[6] = { -1.0f, 0.0f, 0.0f,  // Listener's forward direction
+                                     0.0f, 1.0f, 0.0f }; // Listener's up direction
+
+    alListenerfv(AL_ORIENTATION, listenerOrientation);
 
     ALint sourceState;
     alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
@@ -372,10 +369,6 @@ void Scene::get_wall_distance(float limit){
         }
     }
 }
-
-
-
-
 
 /**
  * Dessine l'image courante
