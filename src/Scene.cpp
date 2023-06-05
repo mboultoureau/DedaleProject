@@ -270,7 +270,7 @@ void Scene::onKeyDown(unsigned char code)
 
 }
 
-void Scene::CheckWall(float limit){
+void Scene::CheckWall(float limit){ //check if there are any walls nearby
     for (int j = 0; j < m_Walls.size(); j++){
         vec3 position = m_Walls[j]->getPosition();
         for(unsigned int i = 0; i <3; i+=2){
@@ -278,7 +278,7 @@ void Scene::CheckWall(float limit){
             float differencePlus = std::abs(position[i] + m_InvPosCam[i]);
 
 
-            if ((differenceMoins<limit)||(differencePlus<limit)){
+            if ((differenceMoins<limit)||(differencePlus<limit)){ //if there is at least one close wall play the sound
                 std::cout << differenceMoins << "m \n";
                 std::cout << differencePlus << "m \n";
                 this->PlaySound(position[0],position[1],0);
@@ -289,7 +289,7 @@ void Scene::CheckWall(float limit){
     }
 }
 
-void Scene::PlaySound(float value1, float value2, float value3){
+void Scene::PlaySound(float value1, float value2, float value3){ //gets the postion of the wall and plays a sound from there
 
     std::chrono::steady_clock::time_point lastSoundTime;
     int soundDelay = 1000; // 1 second
@@ -336,13 +336,13 @@ void Scene::PlaySound(float value1, float value2, float value3){
 
     ALint sourceState;
     alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
-    if (sourceState != AL_PLAYING){
+    if (sourceState != AL_PLAYING){ //prevents several sounds from playing all at once
         alSourcePlay(source);
         std::cout << "Joue son \n";
     }
 
 
-    if (sourceState == AL_STOPPED){
+    if (sourceState == AL_STOPPED){ //problem with deletion : program crashes, don't know why
         // Delete the source and buffer after the sound has finished playing
         alDeleteSources(1, &source);
         alDeleteBuffers(1, &buffer);
