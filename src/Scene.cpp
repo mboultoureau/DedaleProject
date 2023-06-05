@@ -171,6 +171,8 @@ void Scene::onMouseMove(double x, double y)
  */
 void Scene::onKeyDown(unsigned char code)
 {
+    //add checkwall here for continuous sound detection
+    //this->CheckWall(2.0);
     const float step = 0.1f;
     vec3 mvt = vec3::create();
 
@@ -193,7 +195,7 @@ void Scene::onKeyDown(unsigned char code)
 
         case GLFW_KEY_Q: // check walls
             std::cout << "Check walls \n";
-            this->CheckWall(0.2);
+            this->CheckWall(2.0);
             break;
 
         // case GLFW_KEY_Q: // haut
@@ -279,8 +281,7 @@ void Scene::CheckWall(float limit){
             if ((differenceMoins<limit)||(differencePlus<limit)){
                 std::cout << differenceMoins << "m \n";
                 std::cout << differencePlus << "m \n";
-                //this->PlaySound(position[0],position[1],0);
-                this->PlaySound(-1,0,0);
+                this->PlaySound(position[0],position[1],0);
                 std::cout << position[0] << position[1] << position[2] << "\n";
                 //std::cout << "Mur proche \n";
             }
